@@ -4,6 +4,12 @@ I just get tired copy pasting it around :P
 
 [![GitHub license](https://img.shields.io/github/license/5alidz/react-super-simple-wizard)](https://github.com/5alidz/react-super-simple-wizard/blob/master/LICENSE) ![Minzipped size](https://img.shields.io/bundlephobia/minzip/react-super-simple-wizard.svg)
 
+### Install
+
+```
+yarn add react-super-simple-wizard
+```
+
 ### How it works
 
 The only prop you need is `initial` the other props are completley up to you
