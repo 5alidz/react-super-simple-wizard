@@ -1,0 +1,52 @@
+{
+  "name": "react-super-simple-wizard",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": "5alidz",
+  "main": "dist/index.js",
+  "module": "dist/react-super-simple-wizard.esm.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "analyze": "size-limit --why",
+    "build": "dts build",
+    "lint": "dts lint",
+    "prepare": "dts build",
+    "size": "size-limit",
+    "start": "dts watch",
+    "test": "dts test --passWithNoTests"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "dts lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "jest": {
+    "testEnvironment": "jsdom"
+  },
+  "peerDependencies": {
+    "react": ">=16"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "size-limit": [
+    {
+      "path": "dist/react-super-simple-wizard.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/react-super-simple-wizard.esm.js",
+      "limit": "10 KB"
+    }
+  ]
+}
