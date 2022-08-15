@@ -32,7 +32,7 @@ The only prop you need is `initial` the other props are completley up to you
 />
 ```
 
-### And now, an actual usefull example
+### And now, an actual useful example
 
 Imagine you have a protected resource or really any other combination of steps
 
