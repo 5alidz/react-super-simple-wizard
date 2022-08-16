@@ -13,8 +13,8 @@ type StepRenderer<T> = (stepProps: StepProps<T>) => JSX.Element;
 
 type WizardProps<T extends Record<string, unknown>> = {
   [Key in keyof T]: Key extends 'initial'
-  ? Exclude<keyof T, 'initial'>
-  : StepRenderer<T>;
+    ? Exclude<keyof T, 'initial'>
+    : StepRenderer<T>;
 };
 
 // eslint-disable-next-line comma-spacing
@@ -56,10 +56,9 @@ export function Wizard<T extends Record<string, unknown>>(
     return stepsList[prevIndex];
   }, [stepsList, currentStep]);
 
-  const renderStep =
-    componentsRef.get(
-      currentStep === 'initial' ? props.initial : currentStep
-    );
+  const renderStep = componentsRef.get(
+    currentStep === 'initial' ? props.initial : currentStep
+  );
   const hasNext = nextStep !== null;
   const hasPrev = prevStep !== null;
 
@@ -68,17 +67,17 @@ export function Wizard<T extends Record<string, unknown>>(
 
   return renderStep({
     goto: (stepKey) => {
-      setCurrentStep(stepKey === 'initial' ? props.initial : stepKey)
+      setCurrentStep(stepKey === 'initial' ? props.initial : stepKey);
     },
     next: () => hasNext && setCurrentStep(nextStep),
     prev: () => hasPrev && setCurrentStep(prevStep),
     hasNext,
     hasPrev,
-    id: currentStep
+    id: currentStep,
   });
 }
 
 export type WizardStepProps<
   T extends string,
   WP = WizardProps<Record<T | 'initial', unknown>>
-  > = StepProps<WP>;
+> = StepProps<WP>;
