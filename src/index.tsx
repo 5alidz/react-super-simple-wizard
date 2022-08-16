@@ -9,10 +9,12 @@ type StepProps<T> = {
   id: keyof T;
 };
 
+type StepRenderer<T> = (stepProps: StepProps<T>) => JSX.Element;
+
 type WizardProps<T extends Record<string, unknown>> = {
   [Key in keyof T]: Key extends 'initial'
-    ? Exclude<keyof T, 'initial'>
-    : React.FC<StepProps<T>>;
+  ? Exclude<keyof T, 'initial'>
+  : StepRenderer<T>;
 };
 
 // eslint-disable-next-line comma-spacing
@@ -38,8 +40,9 @@ export function Wizard<T extends Record<string, unknown>>(
     () => objKeys(props).filter((key): key is keyof T => key !== 'initial'),
     [props]
   );
-  const componentsRef = React.useRef(
-    new Map(stepsList.map((key) => [key, props[key]] as const))
+  const componentsRef = React.useMemo(
+    () => new Map(stepsList.map((key) => [key, props[key]] as const)),
+    [stepsList]
   );
   const nextStep = React.useMemo(() => {
     const nextIndex = stepsList.indexOf(currentStep) + 1;
@@ -53,32 +56,29 @@ export function Wizard<T extends Record<string, unknown>>(
     return stepsList[prevIndex];
   }, [stepsList, currentStep]);
 
-  const Component: React.FC<StepProps<T>> | undefined =
-    componentsRef.current.get(
+  const renderStep =
+    componentsRef.get(
       currentStep === 'initial' ? props.initial : currentStep
     );
   const hasNext = nextStep !== null;
   const hasPrev = prevStep !== null;
 
-  if (!Component || typeof currentStep == 'symbol')
+  if (!renderStep || typeof currentStep == 'symbol')
     throw new Error(`invalid wizard step ${String(currentStep)}`);
 
-  return (
-    <Component
-      key={currentStep as string}
-      goto={(stepKey) =>
-        setCurrentStep(stepKey === 'initial' ? props.initial : stepKey)
-      }
-      next={() => hasNext && setCurrentStep(nextStep)}
-      prev={() => hasPrev && setCurrentStep(prevStep)}
-      hasNext={hasNext}
-      hasPrev={hasPrev}
-      id={currentStep}
-    />
-  );
+  return renderStep({
+    goto: (stepKey) => {
+      setCurrentStep(stepKey === 'initial' ? props.initial : stepKey)
+    },
+    next: () => hasNext && setCurrentStep(nextStep),
+    prev: () => hasPrev && setCurrentStep(prevStep),
+    hasNext,
+    hasPrev,
+    id: currentStep
+  });
 }
 
 export type WizardStepProps<
   T extends string,
   WP = WizardProps<Record<T | 'initial', unknown>>
-> = StepProps<WP>;
+  > = StepProps<WP>;
